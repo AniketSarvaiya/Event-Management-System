@@ -1,0 +1,19 @@
+
+Event_Detail(e_id, e_name, e_type, guests_ex, s_date, e_date, mgr_id, o_id,v_id);
+
+Organizer_Detail (o_id, fname, mname, lname, o_address, c_id);
+
+Organizer_Contact (c_id, o_phone1,o_phone2, o_email1,o_email2)
+
+Staff_Detail (s_id, s_fname, s_lname, s_dob, s_contact, s_email );
+
+Venue_Detail (v_id, v_name, v_category, v_contact, v_address, v_city, v_pincode, v_rent);
+
+Manager_Detail (mgr_id, s_id);
+
+Invoice (i_id, electricity_cost, staff_cost, extra_cost, venue_rent, food_cost, e_id);
+
+Payment_Detail ( p_id, dop, p_method, i_id, o_id);
+
+create schema event_management;
+set search_path to event_management;

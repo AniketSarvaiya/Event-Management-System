@@ -1,0 +1,152 @@
+create schema event_management;
+set search_path to event_management;
+
+create table venue_detail(
+	v_id varchar(10) primary key,
+	v_name varchar(25) not null,
+	v_category varchar(20) not null,
+	v_contact bigint not null,
+	v_address varchar(30) not null,
+	v_city varchar(30) not null,
+	v_pincode int not null,
+	v_rent int not null
+	
+);
+
+create table organizer_contact (
+
+	c_id varchar(10) primary key,
+	o_phone1 bigint not null,
+	o_phone2 bigint,
+	o_email1 varchar(50),
+	o_email2 varchar(50)
+);
+
+create table organizer_detail(
+	o_id varchar(10) primary key,
+	fname varchar(20) not null,
+	mname varchar(20) not null,
+	lname varchar (20) not null,
+	o_address varchar(50) not null,
+	o_city varchar (20) not null,
+	c_id varchar(10) not null,
+	Foreign key (c_id) references organizer_contact(c_id)
+	on delete cascade on update cascade
+);
+
+create table staff_detail(
+	s_id varchar(10) primary key,
+	s_fname varchar(20) not null,
+	s_lname varchar(20) not null,
+	s_dob date not null,
+	s_contact bigint not null,
+	s_email varchar(50) not null
+);
+
+
+create table manager_detail (
+
+	mgr_id varchar(10) primary key,
+	s_id varchar(10) not null,
+	Foreign key (s_id) references staff_detail(s_id)
+	on delete cascade on update cascade
+);
+
+create table event_detail(
+	e_id varchar(10) primary key,
+	e_name varchar(30) not null,
+	e_type varchar(30) not null,
+	guests_ex int not null,
+	start_date date not null,
+	end_date date not null,
+	mgr_id varchar(10) not null,
+	o_id varchar(10) not null,
+	v_id varchar(10) not null,
+	Foreign key (mgr_id) references manager_detail(mgr_id) on delete cascade on update cascade,
+	Foreign key (o_id) references organizer_detail(o_id) on delete cascade on update cascade,
+	Foreign key (v_id) references venue_detail(v_id) on delete cascade on update cascade	
+);
+
+
+create table invoice_detail(
+	
+	i_id varchar(10) primary key,
+	electricity_cost int not null,
+	staff_cost int not null,
+	extra_cost int not null,
+	venue_rent int not null,
+	food_cost int not null,
+	e_id varchar(10) not null,
+	i_status varchar(10) not null,
+	Foreign key (e_id) references event_detail(e_id) on delete cascade on update cascade 
+	
+);
+
+create table payment_detail(
+
+	p_id varchar(10) primary key,
+	dop date not null,
+	p_method varchar(20) not null,
+	i_id varchar(10) not null,
+	o_id varchar(10) not null,
+	Foreign key (i_id) references invoice_detail(i_id) on delete cascade on update cascade,
+	Foreign key (o_id) references organizer_detail(o_id) on delete cascade on update cascade
+
+);
+
+
+
+insert into venue_detail values ('V01','Heaven Party Plot','Indoor/Outdoor','9988776655','Valthan-Punagam Rd','Surat','395006',12000);
+insert into venue_detail values ('V02','Royal Dine Hall','Indoor','9971668854','Green City Rd, Pal Gam','Surat','395006',10000);
+insert into venue_detail values ('V03','Krishna Party Plot','Outdoor','8832776689','BSNL Colony, Harni','Vadodara','390022',15000);
+insert into venue_detail values ('V04','Seema Hall','Indoor','9875625121',' Anand Nagar, Jodhpur Village','Ahmedabad','380015',14000);
+insert into venue_detail values ('V05','Maharaja Farm','Outdoor','8867631552','Mota Varachha','Surat','394105',20000);
+
+ 
+insert into organizer_contact values ('C01',9428664691,8756428363,'aniketsarvaiya2001@gmail.com',null);
+insert into organizer_contact values ('C02',9712294506,null,'jenishdhanani001@gmail.com',null);
+insert into organizer_contact values ('C03',9408680490,null, 'sultank112@gmail.com','sultankhatri333@gmail.com');
+
+insert into organizer_contact values ('C04',9461186289,null, 'nirbhay113@gmail.com',null);
+insert into organizer_contact values ('C05',7127728449,null, 'jayesh88@gmail.com',null);
+insert into organizer_contact values ('C06',6987066608,4865626463, 'Rajkumar01@gmail.com',null);
+insert into organizer_contact values ('C07',9126439695,null, 'ajayshah09@gmail.com',null);
+insert into organizer_contact values ('C08',8042902402,null, 'harshu88@gmail.com','harsh03@gmail.com');
+insert into organizer_contact values ('C09',8185968266,9333991412, 'mohit055@gmail.com',null);
+insert into organizer_contact values ('C10',8684799180,null, 'shivam22@gmail.com',null);
+
+
+insert into organizer_detail values ('O01','aniket','M','Sarvaiya','603/ Rajhansh Swapna sarthana','Surat','C01');
+insert into organizer_detail values ('O02','jenish','a','dhanani','144 / sagar soc. varachha','Surat','C02');
+insert into organizer_detail values ('O03','sultan','s','khatri','12 / abc nagar navapur ','ahmedabad','C03');
+
+insert into organizer_detail values ('O04','nirbhay','d','movaliya','4-soham kiran chowck ','surat','C04');
+insert into organizer_detail values ('O05','jayesh','s','shah','4, Rander Road Ramnagar  ','surat','C05');
+insert into organizer_detail values ('O06','Raj','a','kumar','2192-Ramkrishna Society-Vasna','ahmedabad','C06');
+insert into organizer_detail values ('O07','ajay','j','shah','13- Station Road','navsari','C07');
+insert into organizer_detail values ('O08','harsh','h','moradiya','3-B Bihari Apartments-RC Dutt Road ','vadodara','C08');
+insert into organizer_detail values ('O09','mohit','d','gohil','324-Belgium Tower-Station Road','surat','C09');
+insert into organizer_detail values ('O10','shivam','b','mohan','9-Old Sachivalaya-Ground Floor','gandhinagar','C10');
+
+
+insert into staff_detail values ('S01','Ramesh','Sharma','04-09-1990',9865321471,'ramesh101@gmail.com');
+insert into staff_detail values ('S02','Arjun','Rai','10-01-1992',8896321475,'arjun22@gmail.com');
+insert into staff_detail values ('S03','jay','Singh','12-06-1991',8236597411,'jaysingh91@gmail.com');
+insert into staff_detail values ('S04','Rakesh','Gupta','08-18-1989',9988776651,'rakesh011@gmail.com');
+insert into staff_detail values ('S05','Dev','Soham','09-21-1996',7539621489,'devsoham96@gmail.com');
+
+
+insert into manager_detail values ('M01', 'S02');
+insert into manager_detail values ('M02', 'S03');
+insert into manager_detail values ('M03', 'S01');
+
+insert into event_detail values ('E01','Birthday Party','Indoor',200,'11-19-2021','11-19-2021','M03','O02','V02');
+insert into event_detail values ('E02','Wedding','Indoor',500,'11-22-2021','11-14-2021','M02','O03','V04');
+insert into event_detail values ('E03','College Party','Outdoor',120,'12-20-2021','12-20-2021','M01','O01','V01');
+
+insert into invoice_detail values ('I01',800,500,400,12000,4000,'E03','paid');
+insert into invoice_detail values ('I02',3500,2000,4000,14000,6000,'E02','unpaid');
+insert into invoice_detail values('I03',2000,1200,1500,10000,5000,'E01','paid');
+
+insert into payment_detail values ('P01','11-10-2021','Cash','I01','O01');
+insert into payment_detail values ('P02','11-22-2021','Cheque','I03','O02');
